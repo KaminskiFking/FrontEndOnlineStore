@@ -1,12 +1,31 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { getCategories } from '../services/api';
 
 export default class Home extends Component {
+  constructor() {
+    super();
+    this.state = {
+      categorie: [],
+    };
+  }
+
+  async componentDidMount() {
+    const categorie = await getCategories();
+    this.setState({
+      categorie,
+    });
+  }
+
   render() {
+    const { categorie } = this.state;
     return (
       <div>
         <div data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
+        </div>
+        <div>
+          {console.log(categorie)}
         </div>
         <div>
           <label htmlFor="text">
@@ -23,9 +42,18 @@ export default class Home extends Component {
             data-testid="shopping-cart-button"
             to="/search"
           >
-            Album
+            Carrinho
 
           </Link>
+          {categorie.map((cat) => (
+            <button
+              key={ cat.id }
+              data-testid="category"
+              type="button"
+            >
+              { cat.name }
+            </button>
+          ))}
         </div>
       </div>
     );
