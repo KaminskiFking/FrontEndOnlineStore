@@ -9,6 +9,7 @@ export default class Home extends Component {
       categorie: [],
       nameText: '',
       products: [],
+      catProd: [],
     };
   }
 
@@ -34,9 +35,18 @@ export default class Home extends Component {
     });
   }
 
+  // fetchCatProd = async (param) => {
+  //   // const { nameText } = this.state;
+  //   const prod = await getProductsFromCategoryAndQuery(param);
+  //   const { results } = prod;
+  //   this.setState({
+  //     catProd: results,
+  //   });
+  // }
+
   render() {
-    const { categorie, nameText, products } = this.state;
-    console.log(products);
+    const { categorie, nameText, products, catProd } = this.state;
+    console.log(catProd);
     return (
       <div>
         <div data-testid="home-initial-message">
@@ -73,11 +83,28 @@ export default class Home extends Component {
               key={ cat.id }
               data-testid="category"
               type="button"
+              onClick={ async () => {
+                // const { nameText } = this.state;
+                const prod = await getProductsFromCategoryAndQuery(cat.name);
+                const { results } = prod;
+                this.setState({
+                  catProd: results,
+                });
+              } }
             >
               {cat.name}
             </button>
           ))}
         </div>
+        {
+          catProd.map((element, index) => (
+            <div data-testid="product" key={ index }>
+              <p>{element.title}</p>
+              <img src={ element.thumbnail } alt={ element.title } />
+              <p>{element.price}</p>
+            </div>
+          ))
+        }
         {products.length !== 0 ? (
           products.map((item, index) => (
             <div data-testid="product" key={ index }>
