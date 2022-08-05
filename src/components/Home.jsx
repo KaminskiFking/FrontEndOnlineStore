@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Home extends Component {
   render() {
@@ -18,6 +19,13 @@ export default class Home extends Component {
             // onChange={ this.onInputChange }
             />
           </label>
+          <Link
+            data-testid="shopping-cart-button"
+            to="/search"
+          >
+            Album
+
+          </Link>
         </div>
       </div>
     );
