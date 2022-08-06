@@ -9,7 +9,6 @@ export default class Home extends Component {
       categorie: [],
       nameText: '',
       products: [],
-      catProd: [],
     };
   }
 
@@ -40,8 +39,7 @@ export default class Home extends Component {
   }
 
   render() {
-    const { categorie, nameText, products, catProd } = this.state;
-    console.log(catProd);
+    const { categorie, nameText, products } = this.state;
     return (
       <div>
         <div data-testid="home-initial-message">
@@ -83,7 +81,7 @@ export default class Home extends Component {
                 const prod = await getProductsFromCategoryAndQuery(cat.name);
                 const { results } = prod;
                 this.setState({
-                  catProd: results,
+                  products: results,
                 });
               } }
             >
@@ -91,35 +89,17 @@ export default class Home extends Component {
             </button>
           ))}
         </div>
-        {
-          catProd.map((element, index) => (
-            <div data-testid="product" key={ index }>
-              <Link
-                to={ `/productDetails/${element.id}` }
-                data-testid="product-detail-link"
-              >
-                <p>{element.title}</p>
-                <img src={ element.thumbnail } alt={ element.title } />
-                <p>{element.price}</p>
-              </Link>
-              <button
-                data-testid="product-add-to-cart"
-                type="button"
-                onClick={ () => this.storageProducts(
-                  element.title, element.price, element.quantifyProduct,
-                ) }
-              >
-                Adicionar Ao Carrinho
-              </button>
-            </div>
-          ))
-        }
         {products.length !== 0 ? (
           products.map((item, index) => (
             <div data-testid="product" key={ index }>
-              <p>{item.title}</p>
-              <img src={ item.thumbnail } alt={ item.title } />
-              <p>{item.price}</p>
+              <Link
+                to={ `/productDetails/${item.id}` }
+                data-testid="product-detail-link"
+              >
+                <p>{item.title}</p>
+                <img src={ item.thumbnail } alt={ item.title } />
+                <p>{item.price}</p>
+              </Link>
               <button
                 data-testid="product-add-to-cart"
                 type="button"
