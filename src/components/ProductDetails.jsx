@@ -17,6 +17,7 @@ class ProductDetails extends Component {
     this.setState({
       products: prod,
     });
+    localStorage.getItem('items');
   }
 
   render() {

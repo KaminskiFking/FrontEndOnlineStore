@@ -10,6 +10,7 @@ export default class Home extends Component {
       nameText: '',
       products: [],
       catProd: [],
+      detailProduts: [],
     };
   }
 
@@ -35,13 +36,22 @@ export default class Home extends Component {
     });
   }
 
-  storageProducts= (paramUm, paramDois, paramTres) => {
-    localStorage.setItem('items', { paramUm }, { paramDois }, { paramTres });
+  storageProducts = (paramUm, paramDois, paramTres) => {
+    const storage = {
+      nome: paramUm,
+      price: paramDois,
+      quantidade: paramTres,
+    };
+    this.setState((prevState) => (
+      { detailProduts: [...prevState.detailProduts, storage],
+      }), () => {
+      const { detailProduts } = this.state;
+      localStorage.setItem('items', JSON.stringify(detailProduts));
+    });
   }
 
   render() {
     const { categorie, nameText, products, catProd } = this.state;
-    console.log(catProd);
     return (
       <div>
         <div data-testid="home-initial-message">
@@ -93,20 +103,24 @@ export default class Home extends Component {
         </div>
         {
           catProd.map((element, index) => (
-            <div data-testid="product" key={ index }>
+            <div key={ index }>
               <Link
                 to={ `/productDetails/${element.id}` }
                 data-testid="product-detail-link"
               >
-                <p>{element.title}</p>
-                <img src={ element.thumbnail } alt={ element.title } />
-                <p>{element.price}</p>
+                <p data-testid="product">{element.title}</p>
+                <img
+                  data-testid="product"
+                  src={ element.thumbnail }
+                  alt={ element.title }
+                />
+                <p data-testid="product">{element.price}</p>
               </Link>
               <button
                 data-testid="product-add-to-cart"
                 type="button"
                 onClick={ () => this.storageProducts(
-                  element.title, element.price, element.quantifyProduct,
+                  element.title, element.price, element.installments,
                 ) }
               >
                 Adicionar Ao Carrinho
@@ -116,10 +130,10 @@ export default class Home extends Component {
         }
         {products.length !== 0 ? (
           products.map((item, index) => (
-            <div data-testid="product" key={ index }>
-              <p>{item.title}</p>
-              <img src={ item.thumbnail } alt={ item.title } />
-              <p>{item.price}</p>
+            <div key={ index }>
+              <p data-testid="product">{item.title}</p>
+              <img data-testid="product" src={ item.thumbnail } alt={ item.title } />
+              <p data-testid="product">{item.price}</p>
               <button
                 data-testid="product-add-to-cart"
                 type="button"

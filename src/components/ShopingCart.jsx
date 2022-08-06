@@ -1,24 +1,38 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 class ShopingCart extends Component {
+  constructor() {
+    super();
+    this.state = {
+      products: [],
+    };
+  }
+
+  componentDidMount() {
+    const getDetailProducts = JSON.parse(localStorage.getItem('items'));
+    this.setState({ products: getDetailProducts });
+  }
+
   render() {
-    const { nameProduct, quantifyProduct } = this.props;
+    const { products } = this.state;
     return (
-      <div
-        data-testid="shopping-cart-empty-message"
-      >
-        Seu carrinho está vazio
-        <p data-testid="shopping-cart-product-name">{nameProduct}</p>
-        <p data-testid="shopping-cart-product-quantity">{quantifyProduct}</p>
+      <div>
+        <p data-testid="shopping-cart-product-quantity">{products.length}</p>
+        {products ? products.map((element, index) => (
+          <div key={ index }>
+            <p data-testid="shopping-cart-product-name">{element.nome}</p>
+            <p>{element.price}</p>
+          </div>
+        )) : (
+          <div
+            data-testid="shopping-cart-empty-message"
+          >
+            Seu carrinho está vazio
+          </div>
+        )}
       </div>
     );
   }
 }
-
-ShopingCart.propTypes = {
-  nameProduct: PropTypes.string.isRequired,
-  quantifyProduct: PropTypes.string.isRequired,
-};
 
 export default ShopingCart;
