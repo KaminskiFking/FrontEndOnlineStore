@@ -35,14 +35,9 @@ export default class Home extends Component {
     });
   }
 
-  // fetchCatProd = async (param) => {
-  //   // const { nameText } = this.state;
-  //   const prod = await getProductsFromCategoryAndQuery(param);
-  //   const { results } = prod;
-  //   this.setState({
-  //     catProd: results,
-  //   });
-  // }
+  storageProducts= (paramUm, paramDois, paramTres) => {
+    localStorage.setItem('items', { paramUm }, { paramDois }, { paramTres });
+  }
 
   render() {
     const { categorie, nameText, products, catProd } = this.state;
@@ -99,9 +94,23 @@ export default class Home extends Component {
         {
           catProd.map((element, index) => (
             <div data-testid="product" key={ index }>
-              <p>{element.title}</p>
-              <img src={ element.thumbnail } alt={ element.title } />
-              <p>{element.price}</p>
+              <Link
+                to={ `/productDetails/${element.id}` }
+                data-testid="product-detail-link"
+              >
+                <p>{element.title}</p>
+                <img src={ element.thumbnail } alt={ element.title } />
+                <p>{element.price}</p>
+              </Link>
+              <button
+                data-testid="product-add-to-cart"
+                type="button"
+                onClick={ () => this.storageProducts(
+                  element.title, element.price, element.quantifyProduct,
+                ) }
+              >
+                Adicionar Ao Carrinho
+              </button>
             </div>
           ))
         }
@@ -111,6 +120,15 @@ export default class Home extends Component {
               <p>{item.title}</p>
               <img src={ item.thumbnail } alt={ item.title } />
               <p>{item.price}</p>
+              <button
+                data-testid="product-add-to-cart"
+                type="button"
+                onClick={ () => this.storageProducts(
+                  item.title, item.price, item.quantifyProduct,
+                ) }
+              >
+                Adicionar Ao Carrinho
+              </button>
             </div>
           ))) : <p>Nenhum produto foi encontrado</p>}
       </div>
