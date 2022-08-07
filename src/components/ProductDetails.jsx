@@ -17,7 +17,6 @@ class ProductDetails extends Component {
     this.setState({
       products: prod,
     });
-    localStorage.getItem('items');
   }
 
   render() {
@@ -28,7 +27,7 @@ class ProductDetails extends Component {
         <p data-testid="product-detail-name">{ title }</p>
         <img data-testid="product-detail-image" src={ thumbnail } alt={ title } />
         <p data-testid="product-detail-price">{ price }</p>
-        <Link to="/search" data-testid="shopping-cart-button">Voltar Ao Carrinho</Link>
+        <Link to="/search" data-testid="shopping-cart-button">Ir para o Carrinho</Link>
       </div>
     );
   }

@@ -93,7 +93,7 @@ export default class Home extends Component {
                 const prod = await getProductsFromCategoryAndQuery(cat.name);
                 const { results } = prod;
                 this.setState({
-                  catProd: results,
+                  products: results,
                 });
               } }
             >
@@ -130,10 +130,15 @@ export default class Home extends Component {
         }
         {products.length !== 0 ? (
           products.map((item, index) => (
-            <div key={ index }>
-              <p data-testid="product">{item.title}</p>
-              <img data-testid="product" src={ item.thumbnail } alt={ item.title } />
-              <p data-testid="product">{item.price}</p>
+            <div data-testid="product" key={ index }>
+              <Link
+                to={ `/productDetails/${item.id}` }
+                data-testid="product-detail-link"
+              >
+                <p>{item.title}</p>
+                <img src={ item.thumbnail } alt={ item.title } />
+                <p>{item.price}</p>
+              </Link>
               <button
                 data-testid="product-add-to-cart"
                 type="button"
