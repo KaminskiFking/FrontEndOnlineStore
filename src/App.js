@@ -6,10 +6,6 @@ import ShopingCart from './components/ShopingCart';
 import ProductDetails from './components/ProductDetails';
 
 export default class App extends Component {
-  componentDidMount() {
-    localStorage.getItem('items');
-  }
-
   render() {
     return (
       <BrowserRouter>

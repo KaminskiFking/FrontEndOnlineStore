@@ -8,6 +8,7 @@ class ProductDetails extends Component {
     super();
     this.state = {
       products: [],
+      productsInfo: [],
     };
   }
 
@@ -16,6 +17,16 @@ class ProductDetails extends Component {
     const prod = await getDetailsById(id);
     this.setState({
       products: prod,
+    });
+  }
+
+  handleClick = () => {
+    const { products } = this.state;
+    this.setState((prevState) => (
+      { productsInfo: [...prevState.productsInfo, products],
+      }), () => {
+      const { productsInfo } = this.state;
+      localStorage.setItem('detailsInfo', JSON.stringify(productsInfo));
     });
   }
 
@@ -28,6 +39,13 @@ class ProductDetails extends Component {
         <img data-testid="product-detail-image" src={ thumbnail } alt={ title } />
         <p data-testid="product-detail-price">{ price }</p>
         <Link to="/search" data-testid="shopping-cart-button">Ir para o Carrinho</Link>
+        <button
+          type="button"
+          onClick={ this.handleClick }
+          data-testid="product-detail-add-to-cart"
+        >
+          Adicionar Ao Carrinho
+        </button>
       </div>
     );
   }
