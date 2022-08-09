@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getDetailsById } from '../services/api';
+import { addItem } from '../services/cartShopItensAPI';
 
 class ProductDetails extends Component {
   constructor() {
     super();
     this.state = {
       products: [],
-      productsInfo: [],
     };
   }
 
@@ -20,28 +20,29 @@ class ProductDetails extends Component {
     });
   }
 
-  handleClick = () => {
-    const { products } = this.state;
-    this.setState((prevState) => (
-      { productsInfo: [...prevState.productsInfo, products],
-      }), () => {
-      const { productsInfo } = this.state;
-      localStorage.setItem('detailsInfo', JSON.stringify(productsInfo));
-    });
+  storageProducts = (title, price, thumbnail) => {
+    const storage = {
+      title,
+      price,
+      thumbnail,
+      quantidade: 1,
+    };
+    addItem(storage);
   }
 
   render() {
     const { products } = this.state;
-    const { title, thumbnail, price } = products;
+    const { title, thumbnail, price, quantidade } = products;
     return (
       <div>
         <p data-testid="product-detail-name">{ title }</p>
         <img data-testid="product-detail-image" src={ thumbnail } alt={ title } />
         <p data-testid="product-detail-price">{ price }</p>
+        {quantidade}
         <Link to="/search" data-testid="shopping-cart-button">Ir para o Carrinho</Link>
         <button
           type="button"
-          onClick={ this.handleClick }
+          onClick={ () => this.storageProducts(title, price, thumbnail) }
           data-testid="product-detail-add-to-cart"
         >
           Adicionar Ao Carrinho

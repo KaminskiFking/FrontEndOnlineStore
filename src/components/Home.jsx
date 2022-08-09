@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import { addItem, getCartItems, removeItem } from '../services/cartShopItensAPI';
 
 export default class Home extends Component {
   constructor() {
@@ -10,7 +11,7 @@ export default class Home extends Component {
       nameText: '',
       products: [],
       catProd: [],
-      detailProduts: [],
+      isDisabled: false,
     };
   }
 
@@ -36,22 +37,37 @@ export default class Home extends Component {
     });
   }
 
-  storageProducts = (paramUm, paramDois, paramTres) => {
-    const storage = {
-      nome: paramUm,
-      price: paramDois,
-      quantidade: paramTres,
-    };
-    this.setState((prevState) => (
-      { detailProduts: [...prevState.detailProduts, storage],
-      }), () => {
-      const { detailProduts } = this.state;
-      localStorage.setItem('items', JSON.stringify(detailProduts));
-    });
+  storageProducts = (e) => {
+    this.setState({ isDisabled: true });
+    const prodList = getCartItems();
+    const test = prodList.some((item) => item.title === e.title);
+    if (test) {
+      prodList.forEach((item2) => {
+        if (item2.title === e.title) {
+          removeItem(item2);
+          const storage = {
+            title: item2.title,
+            price: item2.price,
+            thumbnail: item2.thumbnail,
+            quantidade: item2.quantidade + 1,
+          };
+          addItem(storage);
+        }
+      });
+    } else {
+      const storage = {
+        title: e.title,
+        price: e.price,
+        thumbnail: e.thumbnail,
+        quantidade: 1,
+      };
+      addItem(storage);
+    }
+    this.setState({ isDisabled: false });
   }
 
   render() {
-    const { categorie, nameText, products, catProd } = this.state;
+    const { categorie, nameText, products, catProd, isDisabled } = this.state;
     return (
       <div>
         <div data-testid="home-initial-message">
@@ -85,6 +101,7 @@ export default class Home extends Component {
           </Link>
           {categorie.map((cat) => (
             <button
+              nname="category"
               key={ cat.id }
               data-testid="category"
               type="button"
@@ -102,26 +119,26 @@ export default class Home extends Component {
           ))}
         </div>
         {
-          catProd.map((element, index) => (
+          catProd.map((e2, index) => (
             <div key={ index }>
               <Link
-                to={ `/productDetails/${element.id}` }
+                to={ `/productDetails/${e2.id}` }
                 data-testid="product-detail-link"
               >
-                <p data-testid="product">{element.title}</p>
+                <p data-testid="product">{e2.title}</p>
                 <img
                   data-testid="product"
-                  src={ element.thumbnail }
-                  alt={ element.title }
+                  src={ e2.thumbnail }
+                  alt={ e2.title }
                 />
-                <p data-testid="product">{element.price}</p>
+                <p data-testid="product">{e2.price}</p>
               </Link>
               <button
+                name="product-add-to-cart"
                 data-testid="product-add-to-cart"
                 type="button"
-                onClick={ () => this.storageProducts(
-                  element.title, element.price, element.installments,
-                ) }
+                disabled={ isDisabled }
+                onClick={ () => this.storageProducts(e2) }
               >
                 Adicionar Ao Carrinho
               </button>
@@ -140,11 +157,11 @@ export default class Home extends Component {
                 <p>{item.price}</p>
               </Link>
               <button
+                name="product-add-to-cart"
                 data-testid="product-add-to-cart"
                 type="button"
-                onClick={ () => this.storageProducts(
-                  item.title, item.price, item.quantifyProduct,
-                ) }
+                disabled={ isDisabled }
+                onClick={ () => this.storageProducts(item) }
               >
                 Adicionar Ao Carrinho
               </button>
