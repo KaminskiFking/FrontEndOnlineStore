@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { getCartItems, removeItem, addItem } from '../services/cartShopItensAPI';
 
 class ShopingCart extends Component {
@@ -71,9 +72,13 @@ class ShopingCart extends Component {
     this.Total();
   }
 
+  moveToCheckout = () => {
+    const { history } = this.props;
+    history.push('/search/checkout');
+  }
+
   render() {
     const { products, QUANT } = this.state;
-    console.log(products);
     return (
       <div>
         {products.length !== 0 ? (
@@ -114,9 +119,22 @@ class ShopingCart extends Component {
             </button>
           </div>
         )) : null}
+        <button
+          data-testid="checkout-products"
+          type="button"
+          onClick={ this.moveToCheckout }
+        >
+          Finalizar compra
+        </button>
       </div>
     );
   }
 }
+
+ShopingCart.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default ShopingCart;

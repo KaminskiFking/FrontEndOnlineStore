@@ -4,6 +4,7 @@ import './App.css';
 import Home from './components/Home';
 import ShopingCart from './components/ShopingCart';
 import ProductDetails from './components/ProductDetails';
+import Checkout from './components/Checkout';
 
 export default class App extends Component {
   render() {
@@ -13,6 +14,7 @@ export default class App extends Component {
           <Route exact path="/" component={ Home } />
           <Route exact path="/search" component={ ShopingCart } />
           <Route exact path="/productDetails/:id" component={ ProductDetails } />
+          <Route exact path="/search/checkout" component={ Checkout } />
         </Switch>
       </BrowserRouter>
     );
