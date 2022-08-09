@@ -15,10 +15,12 @@ class ProductDetails extends Component {
       rating: '',
       comentarios: [],
       tela: [],
+      cartSum: 0,
     };
   }
 
   async componentDidMount() {
+    this.Total();
     const { match: { params: { id } } } = this.props;
     const prod = await getDetailsById(id);
     this.setState({
@@ -53,6 +55,7 @@ class ProductDetails extends Component {
       };
       addItem(storage);
     }
+    this.Total();
   }
 
 onInputChange = ({ target }) => {
@@ -86,14 +89,27 @@ handleClickForm = (event) => {
   });
 }
 
+Total() {
+  const cartGeted = getCartItems();
+  if (cartGeted) {
+    let sum = 0;
+    cartGeted.forEach((item) => {
+      sum += item.quantidade;
+      this.setState({ cartSum: sum });
+    });
+  }
+}
+
 render() {
   const { products,
+    cartSum,
     text,
     email,
     tela, radioScreen, emailScreen, textAreaScreen } = this.state;
   const { title, thumbnail, price, quantidade } = products;
   return (
     <div>
+      <p data-testid="shopping-cart-size">{`Itens no carrinho: ${cartSum}`}</p>
       <p data-testid="product-detail-name">{ title }</p>
       <img data-testid="product-detail-image" src={ thumbnail } alt={ title } />
       <p data-testid="product-detail-price">{ price }</p>

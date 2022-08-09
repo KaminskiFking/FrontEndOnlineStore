@@ -12,6 +12,7 @@ export default class Home extends Component {
       products: [],
       catProd: [],
       isDisabled: false,
+      cartSum: 0,
     };
   }
 
@@ -20,6 +21,7 @@ export default class Home extends Component {
     this.setState({
       categorie,
     });
+    this.Total();
   }
 
   onChange = ({ target }) => {
@@ -63,14 +65,27 @@ export default class Home extends Component {
       };
       addItem(storage);
     }
+    this.Total();
     this.setState({ isDisabled: false });
   }
 
+  Total() {
+    const cartGeted = getCartItems();
+    if (cartGeted) {
+      let sum = 0;
+      cartGeted.forEach((item) => {
+        sum += item.quantidade;
+        this.setState({ cartSum: sum });
+      });
+    }
+  }
+
   render() {
-    const { categorie, nameText, products, catProd, isDisabled } = this.state;
+    const { categorie, nameText, products, catProd, isDisabled, cartSum } = this.state;
     return (
       <div>
         <div data-testid="home-initial-message">
+          <p data-testid="shopping-cart-size">{`Itens no carrinho: ${cartSum}`}</p>
           Digite algum termo de pesquisa ou escolha uma categoria.
         </div>
         <div>
