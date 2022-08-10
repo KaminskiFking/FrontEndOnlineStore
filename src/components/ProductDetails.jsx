@@ -89,7 +89,7 @@ handleClickForm = (event) => {
   });
 }
 
-Total() {
+Total() { // req 13
   const cartGeted = getCartItems();
   if (cartGeted) {
     let sum = 0;

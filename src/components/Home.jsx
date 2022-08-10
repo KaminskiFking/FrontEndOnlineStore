@@ -69,7 +69,7 @@ export default class Home extends Component {
     this.setState({ isDisabled: false });
   }
 
-  Total() {
+  Total() { // req 13
     const cartGeted = getCartItems();
     if (cartGeted) {
       let sum = 0;
