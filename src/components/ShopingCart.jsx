@@ -7,21 +7,12 @@ class ShopingCart extends Component {
     super();
     this.state = {
       products: [],
-      QUANT: 0,
     };
   }
 
   async componentDidMount() {
     const products = await getCartItems();
     this.setState({ products });
-    this.Total();
-  }
-
-  Total = () => {
-    const { products } = this.state;
-    this.setState({ QUANT: 0 });
-    products.forEach((item) => this
-      .setState((prevState) => ({ QUANT: prevState.QUANT + item.quantidade })));
   }
 
   removeAllItens = (title) => {
@@ -29,26 +20,25 @@ class ShopingCart extends Component {
     prodList.forEach((item) => item.title === title && removeItem(item));
     const products = getCartItems();
     this.setState({ products });
-    this.Total();
   }
 
   addQuant = (element) => {
     const prodList = getCartItems();
     prodList.forEach((item) => {
-      if (item.title === element.title) {
+      if (item.title === element.title && item.quantidade < item.available_quantity) {
         removeItem(element);
         const storage = {
           title: element.title,
           price: element.price,
           thumbnail: element.thumbnail,
           quantidade: element.quantidade + 1,
+          available_quantity: element.available_quantity,
         };
         addItem(storage);
       }
     });
     const products = getCartItems();
     this.setState({ products });
-    this.Total();
   }
 
   decreaseQuant = (element) => {
@@ -61,6 +51,7 @@ class ShopingCart extends Component {
           price: element.price,
           thumbnail: element.thumbnail,
           quantidade: element.quantidade - 1,
+          available_quantity: element.available_quantity,
         };
         if (storage.quantidade > 0) {
           addItem(storage);
@@ -69,7 +60,6 @@ class ShopingCart extends Component {
     });
     const products = getCartItems();
     this.setState({ products });
-    this.Total();
   }
 
   moveToCheckout = () => {
@@ -77,48 +67,46 @@ class ShopingCart extends Component {
     history.push('/search/checkout');
   }
 
+  // .sort((a, b) => ((a.title > b.title) ? 1 : sn))
+
   render() {
-    const { products, QUANT } = this.state;
+    const { products } = this.state;
     return (
       <div>
-        {products.length !== 0 ? (
-          <p>
-            {QUANT}
+        {products.length === 0 && (
+          <p data-testid="shopping-cart-empty-message">
+            Seu carrinho está vazio
           </p>
-        )
-          : (
-            <p data-testid="shopping-cart-empty-message">
-              Seu carrinho está vazio
-            </p>
-          )}
-        {products.length !== 0 ? products.map((element, id) => (
-          <div key={ id }>
-            <p data-testid="shopping-cart-product-name">{element.title}</p>
-            <p>{element.price}</p>
-            <p data-testid="shopping-cart-product-quantity">{element.quantidade}</p>
-            <button
-              data-testid="remove-product"
-              type="button"
-              onClick={ () => this.removeAllItens(element.title) }
-            >
-              Remover
-            </button>
-            <button
-              data-testid="product-decrease-quantity"
-              type="button"
-              onClick={ () => this.decreaseQuant(element) }
-            >
-              -
-            </button>
-            <button
-              data-testid="product-increase-quantity"
-              type="button"
-              onClick={ () => this.addQuant(element) }
-            >
-              +
-            </button>
-          </div>
-        )) : null}
+        ) }
+        {products.length !== 0 ? products
+          .map((element, id) => (
+            <div key={ id }>
+              <p data-testid="shopping-cart-product-name">{element.title}</p>
+              <p>{element.price}</p>
+              <p data-testid="shopping-cart-product-quantity">{element.quantidade}</p>
+              <button
+                data-testid="remove-product"
+                type="button"
+                onClick={ () => this.removeAllItens(element.title) }
+              >
+                Remover
+              </button>
+              <button
+                data-testid="product-decrease-quantity"
+                type="button"
+                onClick={ () => this.decreaseQuant(element) }
+              >
+                -
+              </button>
+              <button
+                data-testid="product-increase-quantity"
+                type="button"
+                onClick={ () => this.addQuant(element) }
+              >
+                +
+              </button>
+            </div>
+          )) : null}
         <button
           data-testid="checkout-products"
           type="button"

@@ -9,6 +9,7 @@ class Checkout extends React.Component {
     email: '',
     cpf: '',
     cep: '',
+    telefone: '',
     endereco: '',
     pagamento: false,
     invalidMessage: false,
@@ -65,7 +66,7 @@ class Checkout extends React.Component {
     return (
       <div>
         {products.map((product, index) => (
-          <p key={ index }>{ product.title }</p>
+          <p data-testid="checkout-fullname" key={ index }>{ product.title }</p>
         ))}
         {invalidMessage
           && <p data-testid="error-msg">Campos inválidos</p>}
