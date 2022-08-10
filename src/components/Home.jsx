@@ -52,6 +52,7 @@ export default class Home extends Component {
             price: item2.price,
             thumbnail: item2.thumbnail,
             quantidade: item2.quantidade + 1,
+            available_quantity: item2.available_quantity,
           };
           addItem(storage);
         }
@@ -62,6 +63,7 @@ export default class Home extends Component {
         price: e.price,
         thumbnail: e.thumbnail,
         quantidade: 1,
+        available_quantity: e.available_quantity,
       };
       addItem(storage);
     }
@@ -116,7 +118,7 @@ export default class Home extends Component {
           </Link>
           {categorie.map((cat) => (
             <button
-              nname="category"
+              name="category"
               key={ cat.id }
               data-testid="category"
               type="button"
@@ -141,6 +143,11 @@ export default class Home extends Component {
                 data-testid="product-detail-link"
               >
                 <p data-testid="product">{e2.title}</p>
+                {e2.shipping.free_shipping === true && (
+                  <p data-testid="free-shipping">
+                    Frete Grátis !
+                  </p>
+                ) }
                 <img
                   data-testid="product"
                   src={ e2.thumbnail }
@@ -168,6 +175,11 @@ export default class Home extends Component {
                 data-testid="product-detail-link"
               >
                 <p>{item.title}</p>
+                {item.shipping.free_shipping === true && (
+                  <p data-testid="free-shipping">
+                    Frete Grátis !
+                  </p>
+                ) }
                 <img src={ item.thumbnail } alt={ item.title } />
                 <p>{item.price}</p>
               </Link>

@@ -42,6 +42,7 @@ class ProductDetails extends Component {
             price: item2.price,
             thumbnail: item2.thumbnail,
             quantidade: item2.quantidade + 1,
+            available_quantity: item2.available_quantity,
           };
           addItem(storage);
         }
@@ -52,6 +53,7 @@ class ProductDetails extends Component {
         price: e.price,
         thumbnail: e.thumbnail,
         quantidade: 1,
+        available_quantity: e.available_quantity,
       };
       addItem(storage);
     }
